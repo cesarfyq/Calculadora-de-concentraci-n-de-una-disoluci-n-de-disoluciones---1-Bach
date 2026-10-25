@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dilución de una disolución / Mezcla de dos disoluciones - @cesarfyq</title>
+<style>
+:root{--blue:#245a80;--ink:#243342;--muted:#5c6b78;--line:#d7e1e9}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;background:#eef4f8;color:var(--ink);margin:0;padding:18px}h1,h2{color:#173f5f;margin-top:0}h1{font-size:1.55rem}h2{font-size:1.18rem}.card{background:#fff;border-radius:12px;padding:17px;box-shadow:0 2px 8px #0001;margin-bottom:16px;min-width:0}.intro{border-top:5px solid var(--blue)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{display:flex;flex-direction:column;gap:5px;min-width:0}.full{grid-column:1/-1}label{font-size:.88rem;font-weight:700}input,select{width:100%;min-width:0;padding:9px;border:1px solid #b9c8d4;border-radius:7px;background:white;color:var(--ink);font:inherit}input:focus,select:focus{outline:2px solid #8bb8d5}.small{font-size:.86rem;color:var(--muted);line-height:1.45}.subcard{background:#f7fafc;border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:12px}.amount-row{display:grid;grid-template-columns:1fr 100px;gap:8px}button{border:0;background:var(--blue);color:white;padding:11px 16px;border-radius:8px;font-weight:700;cursor:pointer}.actions{display:flex;gap:10px;flex-wrap:wrap}#warning{color:#9a3412;font-weight:700;line-height:1.45}.result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.result{border:1px solid var(--line);border-radius:9px;padding:12px;background:#fbfdff;overflow-wrap:anywhere}.name{font-size:.86rem;color:var(--muted);margin-bottom:5px}.value{font-size:1.08rem;font-weight:700;color:#173f5f}.equation{border-left:3px solid #9bbdd4;padding:7px 10px;margin:8px 0;background:#f8fbfd;line-height:1.55}details{margin-top:12px}summary{cursor:pointer;font-weight:700;color:var(--blue)}table{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:8px}th,td{border-bottom:1px solid var(--line);padding:7px;text-align:left;vertical-align:top}th{background:#f0f6fa}.hidden{display:none!important}.unknown-row{display:flex;align-items:center;gap:7px;margin-top:5px;font-size:.85rem;font-weight:400;color:var(--muted)}.unknown-row input{width:auto;margin:0}.custom-unknown{display:none}.custom-unknown.visible{display:flex}.note{background:#fff8e8;border:1px solid #f0d9a7;padding:10px;border-radius:8px}footer{text-align:center;color:var(--muted);font-size:.8rem;margin:16px}@media(max-width:800px){body{padding:10px}.grid{grid-template-columns:1fr}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:430px){.fields,.result-grid{grid-template-columns:1fr}.amount-row{grid-template-columns:1fr 95px}}
+</style></head><body>
+<section class="card intro"><h1>Dilución de una disolución / Mezcla de dos disoluciones - @cesarfyq</h1>
+<p>Simulador para calcular la concentración de la disolución resultante de diluir una disolución añadiendo más disolvente, o de mezclar dos disoluciones que contienen <b>el mismo soluto y el mismo disolvente</b>.</p>
+<p>Permite elegir la concentración inicial de cada disolución y calcular la concentración final de seis formas distintas.</p>
+<p><b>Modelo simplificado:</b> se consideran <b>volúmenes aditivos</b>, por lo que el volumen final es la suma de los volúmenes iniciales. Es una aproximación educativa; en mezclas reales los volúmenes no siempre son estrictamente aditivos.</p>
+<p class="small"><b>Instrucciones:</b> selecciona el soluto y el disolvente de la/s disolución/es. Puedes seleccionar uno personalizado, e introducir sus masas molares y la densidad del soluto. Si no la sabes, márcalo.</p>
+<p class="small">Para cada disolución, elige una forma de concentración (y escribe su valor) e indica la cantidad inicial en gramos o en mililitros de disolución.</p>
+<p class="small">Si la sabes, introduce también la densidad de cada disolución. Si no la sabes, márcalo.</p>
+<p class="small">Si quieres simular una dilución, selecciona en la segunda disolución "solo disolvente (concentración cero)".</p></section>
+<section class="card"><h2>1. Sustancias comunes a ambas disoluciones</h2><div class="fields">
+<div class="field"><label for="solutePreset">Soluto</label><select id="solutePreset"><option value="NaCl">Cloruro de sodio (NaCl)</option><option value="Glucosa">Glucosa</option><option value="CuSO4">Sulfato de cobre(II) (CuSO₄)</option><option value="Etanol">Etanol</option><option value="Acetona">Acetona</option><option value="Acido acetico">Ácido acético</option><option value="custom">Personalizado</option></select></div>
+<div class="field"><label for="solventPreset">Disolvente</label><select id="solventPreset"><option value="Agua">Agua</option><option value="Etanol">Etanol</option><option value="Glicerina">Glicerina</option><option value="custom">Personalizado</option></select></div>
+<div class="field"><label for="MMs">Masa molar del soluto (g/mol)</label><input id="MMs" type="number" min="0.000001" step="any" value="58.44"><label class="unknown-row custom-unknown"><input id="MMsUnknown" type="checkbox"> Desconocida</label></div>
+<div class="field"><label for="MMd">Masa molar del disolvente (g/mol)</label><input id="MMd" type="number" min="0.000001" step="any" value="18.015"><label class="unknown-row custom-unknown"><input id="MMdUnknown" type="checkbox"> Desconocida</label></div>
+<div class="field"><label for="rhoSolute">Densidad del soluto puro (g/mL)</label><input id="rhoSolute" type="number" min="0.000001" step="any" value="2.165"><label class="unknown-row custom-unknown"><input id="rhoSoluteUnknown" type="checkbox"> Desconocida</label></div>
+</div>
+<p class="small">Las masas molares y las propiedades de las sustancias son comunes a ambas disoluciones. La densidad del soluto puro se utiliza para calcular el porcentaje en volumen. Puedes modificar los valores de los compuestos habituales o seleccionar «Personalizado».</p></section>
+<div class="grid">
+<section class="card"><h2>2. Primera disolución</h2><div class="fields">
+<div class="field full"><label for="type1">Forma de concentración inicial</label><select id="type1" class="ctype"><option value="massPct">Porcentaje en masa (%)</option><option value="volPct">Porcentaje en volumen (%)</option><option value="gL">Concentración en masa (g/L)</option><option value="M">Molaridad (M o mol/L)</option><option value="molal">Molalidad (mol/kg)</option><option value="x">Fracción molar del soluto</option></select></div>
+<div class="field"><label for="c1">Valor de la concentración</label><input id="c1" type="number" min="0" step="any" value="10"></div><div class="field"><label for="rho1">Densidad de la disolución (g/mL)</label><input id="rho1" type="number" min="0.000001" step="any" value="1.07"><label class="unknown-row"><input id="rho1Unknown" type="checkbox"> Desconocida</label></div>
+<div class="field full"><label>Cantidad inicial de disolución</label><div class="amount-row"><input id="amount1" type="number" min="0.000001" step="any" value="100" aria-label="Cantidad de la primera disolución"><select id="unit1" aria-label="Unidad de cantidad de la primera disolución"><option value="mL">mL</option><option value="g">g</option></select></div></div></div></section>
+<section class="card"><h2>3. Segunda disolución</h2><div class="fields">
+<div class="field full"><label for="type2">Forma de concentración inicial</label><select id="type2" class="ctype"><option value="massPct">Porcentaje en masa (%)</option><option value="volPct">Porcentaje en volumen (%)</option><option value="gL">Concentración en masa (g/L)</option><option value="M">Molaridad (M o mol/L)</option><option value="molal">Molalidad (mol/kg)</option><option value="x">Fracción molar del soluto</option><option value="zero">Solo disolvente (concentración cero)</option></select></div>
+<div class="field" id="c2wrap"><label for="c2">Valor de la concentración</label><input id="c2" type="number" min="0" step="any" value="2"></div><div class="field"><label for="rho2">Densidad de la disolución (g/mL)</label><input id="rho2" type="number" min="0.000001" step="any" value="1.02"><label class="unknown-row"><input id="rho2Unknown" type="checkbox"> Desconocida</label></div>
+<div class="field full"><label>Cantidad inicial de disolución</label><div class="amount-row"><input id="amount2" type="number" min="0.000001" step="any" value="100" aria-label="Cantidad de la segunda disolución"><select id="unit2" aria-label="Unidad de cantidad de la segunda disolución"><option value="mL">mL</option><option value="g">g</option></select></div></div></div></section></div>
+<section class="card"><div class="actions"><button id="calculate" type="button">Calcular mezcla</button><button id="reset" type="button" style="background:#607586">Restablecer valores de ejemplo</button></div><p id="warning" role="status" aria-live="polite"></p></section>
+<section class="card"><h2>4. Resultados de la mezcla</h2><p class="small">Los resultados se actualizan automáticamente al modificar los datos. Se muestran con tres cifras decimales.</p>
+<div class="result-grid"><div class="result"><div class="name">Volumen final (volúmenes aditivos)</div><div class="value" id="rV">—</div></div><div class="result"><div class="name">Masa total de la mezcla</div><div class="value" id="rMass">—</div></div><div class="result"><div class="name">Masa de soluto</div><div class="value" id="rSolute">—</div></div><div class="result"><div class="name">Masa de disolvente</div><div class="value" id="rSolvent">—</div></div><div class="result"><div class="name">Densidad final calculada</div><div class="value" id="rRho">—</div></div><div class="result"><div class="name">Concentración en masa</div><div class="value" id="rGL">—</div></div><div class="result"><div class="name">Porcentaje en masa</div><div class="value" id="rMassPct">—</div></div><div class="result"><div class="name">Porcentaje en volumen</div><div class="value" id="rVolPct">—</div></div><div class="result"><div class="name">Molaridad</div><div class="value" id="rM">—</div></div><div class="result"><div class="name">Molalidad</div><div class="value" id="rMolal">—</div></div><div class="result"><div class="name">Fracción molar del soluto</div><div class="value" id="rXsol">—</div></div><div class="result"><div class="name">Fracción molar del disolvente</div><div class="value" id="rXsolv">—</div></div></div>
+<details><summary>Ver el balance de cada disolución y las fórmulas empleadas</summary><div id="balance"></div><div class="equation"><b>Concentración en masa:</b> C = m(soluto) / V(disolución).</div><div class="equation"><b>Porcentaje en masa:</b> % m/m = m(soluto) / m(disolución) · 100.</div><div class="equation"><b>Porcentaje en volumen:</b> % V/V = V(soluto puro) / V(disolución) · 100.</div><div class="equation"><b>Molaridad:</b> M = n(soluto) / V(disolución en L).</div><div class="equation"><b>Molalidad:</b> m = n(soluto) / masa de disolvente (kg).</div><div class="equation"><b>Fracción molar:</b> x(soluto) = n(soluto) / [n(soluto) + n(disolvente)]; x(disolvente) = 1 − x(soluto).</div><p class="small">La cantidad en gramos se interpreta como masa total de disolución; la cantidad en mL, como volumen de disolución. La masa de disolvente se obtiene restando la masa de soluto a la masa total. Si los datos implican una masa de disolvente negativa, la combinación no es físicamente compatible.</p></details></section>
+<footer>Simulador educativo de mezclas de disoluciones · 1.º de Bachillerato</footer>
+<script>
+const soluteData={"NaCl":{MM:58.44,rho:2.165},"Glucosa":{MM:180.156,rho:1.54},"CuSO4":{MM:159.609,rho:3.60},"Etanol":{MM:46.068,rho:0.789},"Acetona":{MM:58.08,rho:0.784},"Acido acetico":{MM:60.052,rho:1.049},"custom":{MM:100,rho:1}};
+const solventData={"Agua":{MM:18.015,rho:0.998},"Etanol":{MM:46.068,rho:0.789},"Glicerina":{MM:92.094,rho:1.261},"custom":{MM:100,rho:1}};
+const $=id=>document.getElementById(id);
+const fmt=(x,d=3)=>{if(!Number.isFinite(x))return "—";if(x!==0&&(Math.abs(x)<.001||Math.abs(x)>=1e6))return x.toExponential(3).replace(".",",");return x.toFixed(d).replace(".",",")};
+const labels={massPct:"Porcentaje en masa (%)",volPct:"Porcentaje en volumen (%)",gL:"Concentración en masa (g/L)",M:"Molaridad (mol/L)",molal:"Molalidad (mol/kg)",x:"Fracción molar del soluto",zero:"Solo disolvente"};
+function updateSubstanceFields(){
+  const customS=$("solutePreset").value==="custom",customD=$("solventPreset").value==="custom";
+  const s=soluteData[$("solutePreset").value]||soluteData.custom;const d=solventData[$("solventPreset").value]||solventData.custom;
+  if(!customS){$("MMs").value=s.MM;$("rhoSolute").value=s.rho;$("MMsUnknown").checked=false;$("rhoSoluteUnknown").checked=false;}
+  if(!customD){$("MMd").value=d.MM;$("MMdUnknown").checked=false;}
+  document.querySelectorAll(".custom-unknown").forEach(el=>el.classList.remove("visible"));
+  if(customS){$("MMsUnknown").parentElement.classList.add("visible");$("rhoSoluteUnknown").parentElement.classList.add("visible");}
+  if(customD)$("MMdUnknown").parentElement.classList.add("visible");
+  ["MMs","rhoSolute","MMd"].forEach(id=>$(id).disabled=$(id+"Unknown").checked);
+  calculate();
+}
+function updateConcentrationControl(i){const t=$("type"+i).value;$("c"+i).disabled=t==="zero";if(i===2)$("c2wrap").classList.toggle("hidden",t==="zero")}
+function positive(id,label,zero=false){const v=Number($(id).value);if(!Number.isFinite(v)||v<0||(!zero&&v===0))throw Error(label+(zero?" debe ser mayor o igual que cero.":" debe ser mayor que cero."));return v}
+function substance(){
+  const read=(field,unknown,label)=>$(unknown).checked?NaN:positive(field,label);
+  return{MMs:read("MMs","MMsUnknown","La masa molar del soluto"),MMd:read("MMd","MMdUnknown","La masa molar del disolvente"),rhoS:read("rhoSolute","rhoSoluteUnknown","La densidad del soluto")};
+}
+function knownOrNaN(v){return Number.isFinite(v)?v:NaN}
+function makeSolution(i,p){
+  const type=$("type"+i).value;
+  const c=type==="zero"?0:positive("c"+i,"La concentración de la disolución "+i,true);
+  const amount=positive("amount"+i,"La cantidad de la disolución "+i);
+  const unit=$("unit"+i).value;
+  const rhoUnknown=$("rho"+i+"Unknown").checked;
+  const rho=rhoUnknown?NaN:positive("rho"+i,"La densidad de la disolución "+i);
+  const totalMass=unit==="g"?amount:(rhoUnknown?NaN:amount*rho);
+  const volumeML=unit==="mL"?amount:(rhoUnknown?NaN:amount/rho);
+  let ms=NaN, nS=NaN;
+  switch(type){
+    case "massPct":
+      if(c>100)throw Error("El porcentaje en masa de la disolución "+i+" no puede superar el 100 %.");
+      if(Number.isFinite(totalMass))ms=totalMass*c/100;
+      break;
+    case "volPct":
+      if(c>100)throw Error("El porcentaje en volumen de la disolución "+i+" no puede superar el 100 %.");
+      if(Number.isFinite(volumeML)&&Number.isFinite(p.rhoS))ms=volumeML*c/100*p.rhoS;
+      break;
+    case "gL":
+      if(Number.isFinite(volumeML))ms=c*volumeML/1000;
+      break;
+    case "M":
+      if(Number.isFinite(volumeML)){nS=c*volumeML/1000;if(Number.isFinite(p.MMs))ms=nS*p.MMs;}
+      break;
+    case "molal":
+      if(Number.isFinite(totalMass)&&Number.isFinite(p.MMs))ms=totalMass*(c*p.MMs/1000)/(1+c*p.MMs/1000);
+      break;
+    case "x":
+      if(c>1)throw Error("La fracción molar de la disolución "+i+" debe estar entre 0 y 1.");
+      if(Number.isFinite(totalMass)&&Number.isFinite(p.MMs)&&Number.isFinite(p.MMd)){
+        if(c===1)ms=totalMass;
+        else{const ratio=c/(1-c)*p.MMs/p.MMd;ms=totalMass*ratio/(1+ratio)}
+      }
+      break;
+    case "zero": ms=0;nS=0;break;
+    default:throw Error("Forma de concentración no reconocida.");
+  }
+  if(!Number.isFinite(nS)&&Number.isFinite(ms)&&Number.isFinite(p.MMs))nS=ms/p.MMs;
+  if(Number.isFinite(ms)&&Number.isFinite(totalMass)){
+    const tol=Math.max(1e-8,totalMass*1e-8);
+    if(ms < -tol || ms-totalMass > tol)throw Error("Los datos de la disolución "+i+" no son físicamente compatibles: la masa calculada de soluto supera la masa total. Revisa la concentración y la densidad.");
+    if(ms<0)ms=0;if(ms>totalMass)ms=totalMass;
+  }
+  const solventMass=Number.isFinite(totalMass)&&Number.isFinite(ms)?Math.max(0,totalMass-ms):NaN;
+  if(type==="molal"&&Number.isFinite(solventMass))nS=c*solventMass/1000;
+  return{totalMass,volumeML,soluteMass:ms,solventMass,soluteMoles:nS,type,concentration:c,unit,amount,rhoUnknown};
+}
+function sumKnown(a,b){return Number.isFinite(a)&&Number.isFinite(b)?a+b:NaN}
+function displayOrUnknown(value,unit,d=3){
+  return Number.isFinite(value)?fmt(value,d)+(unit?" "+unit:""):"No calculable sin conocer las densidades/datos necesarios";
+}
+function calculate(){
+  try{
+    $("warning").textContent="";
+    const p=substance(),a=makeSolution(1,p),b=makeSolution(2,p);
+    const mass=sumKnown(a.totalMass,b.totalMass);
+    const ms=sumKnown(a.soluteMass,b.soluteMass);
+    const md=sumKnown(a.solventMass,b.solventMass);
+    const V=sumKnown(a.volumeML,b.volumeML);
+    const rho=Number.isFinite(mass)&&Number.isFinite(V)&&V>0?mass/V:NaN;
+    const VL=Number.isFinite(V)?V/1000:NaN;
+    const nS=sumKnown(a.soluteMoles,b.soluteMoles);
+    const nD=Number.isFinite(md)&&Number.isFinite(p.MMd)?md/p.MMd:NaN;
+    const gL=Number.isFinite(ms)&&Number.isFinite(VL)&&VL>0?ms/VL:NaN;
+    const massPct=Number.isFinite(ms)&&Number.isFinite(mass)&&mass>0?100*ms/mass:NaN;
+    const volPct=Number.isFinite(ms)&&Number.isFinite(p.rhoS)&&Number.isFinite(V)&&V>0?100*(ms/p.rhoS)/V:NaN;
+    const molarity=Number.isFinite(nS)&&Number.isFinite(VL)&&VL>0?nS/VL:NaN;
+    const molality=Number.isFinite(nS)&&Number.isFinite(md)&&md>0?nS/(md/1000):NaN;
+    const xS=Number.isFinite(nS)&&Number.isFinite(nD)&&nS+nD>0?nS/(nS+nD):NaN;
+    const xD=Number.isFinite(nS)&&Number.isFinite(nD)&&nS+nD>0?nD/(nS+nD):NaN;
+
+    const out={
+      rV:displayOrUnknown(V,"mL"),
+      rMass:displayOrUnknown(mass,"g"),
+      rSolute:displayOrUnknown(ms,"g"),
+      rSolvent:displayOrUnknown(md,"g"),
+      rRho:displayOrUnknown(rho,"g/mL"),
+      rGL:displayOrUnknown(gL,"g/L"),
+      rMassPct:displayOrUnknown(massPct,"%"),
+      rVolPct:displayOrUnknown(volPct,"%"),
+      rM:Number.isFinite(molarity)?fmt(molarity)+" M = "+fmt(molarity)+" mol/L":"No calculable sin conocer las densidades/datos necesarios",
+      rMolal:Number.isFinite(molality)?fmt(molality)+" m = "+fmt(molality)+" mol/kg":"No calculable sin conocer las densidades/datos necesarios",
+      rXsol:displayOrUnknown(xS,"",5),
+      rXsolv:displayOrUnknown(xD,"",5)
+    };
+    Object.entries(out).forEach(([id,v])=>$(id).textContent=v);
+
+    const row=(label,x,y,total,unit="g")=>`<tr><td>${label}</td><td>${Number.isFinite(x)?fmt(x)+(unit?" "+unit:""):"Desconocido"}</td><td>${Number.isFinite(y)?fmt(y)+(unit?" "+unit:""):"Desconocido"}</td><td>${Number.isFinite(total)?fmt(total)+(unit?" "+unit:""):"No calculable"}</td></tr>`;
+    $("balance").innerHTML=`
+      <table><thead><tr><th>Magnitud</th><th>Disolución 1</th><th>Disolución 2</th><th>Mezcla</th></tr></thead><tbody>
+      ${row("Volumen",a.volumeML,b.volumeML,V,"mL")}
+      ${row("Masa total",a.totalMass,b.totalMass,mass,"g")}
+      ${row("Masa de soluto",a.soluteMass,b.soluteMass,ms,"g")}
+      ${row("Masa de disolvente",a.solventMass,b.solventMass,md,"g")}
+      <tr><td>Concentración inicial</td><td>${labels[a.type]}: ${fmt(a.concentration,4)}</td><td>${labels[b.type]}: ${fmt(b.concentration,4)}</td><td>Calculada a partir de los datos conocidos</td></tr>
+      </tbody></table>
+      <p class="small">Cuando una densidad está marcada como desconocida, el simulador calcula cada magnitud siempre que pueda obtenerse a partir de los datos disponibles. Los resultados que requieren la densidad se indican como no calculables.</p>`;
+    const unknowns=[];
+    if(a.rhoUnknown)unknowns.push("primera");
+    if(b.rhoUnknown)unknowns.push("segunda");
+    if(unknowns.length)$("warning").textContent="Densidad desconocida en la "+unknowns.join(" y ")+ " disolución: se mostrarán solo los resultados que puedan calcularse con los datos disponibles.";
+  }catch(e){
+    $("warning").textContent=e.message;
+    ["rV","rMass","rSolute","rSolvent","rRho","rGL","rMassPct","rVolPct","rM","rMolal","rXsol","rXsolv"].forEach(id=>$(id).textContent="—");
+    $("balance").innerHTML="";
+  }
+}
+function hints(){updateConcentrationControl(1);updateConcentrationControl(2);calculate()}
+$("solutePreset").addEventListener("change",updateSubstanceFields);$("solventPreset").addEventListener("change",updateSubstanceFields);["type1","type2"].forEach(id=>$(id).addEventListener("change",hints));["c1","c2","rho1","rho2","amount1","amount2","unit1","unit2","MMs","MMd","rhoSolute"].forEach(id=>$(id).addEventListener("input",calculate));["MMsUnknown","MMdUnknown","rhoSoluteUnknown"].forEach(id=>$(id).addEventListener("change",()=>{const field=id.replace("Unknown","");$(field).disabled=$(id).checked;calculate()}));["rho1Unknown","rho2Unknown"].forEach(id=>$(id).addEventListener("change",()=>{const n=id.endsWith("1Unknown")?1:2;$("rho"+n).disabled=$(id).checked;calculate()}));$("calculate").addEventListener("click",calculate);$("reset").addEventListener("click",()=>{$("solutePreset").value="NaCl";$("solventPreset").value="Agua";$("type1").value="massPct";$("c1").value=10;$("rho1").value=1.07;$("rho1Unknown").checked=false;$("rho1").disabled=false;$("amount1").value=100;$("unit1").value="mL";$("type2").value="massPct";$("c2").value=2;$("rho2").value=1.02;$("rho2Unknown").checked=false;$("rho2").disabled=false;$("amount2").value=100;$("unit2").value="mL";updateSubstanceFields();hints()});updateSubstanceFields();hints();
+</script></body></html>
